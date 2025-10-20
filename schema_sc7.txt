@@ -1,0 +1,299 @@
+Campo	Titulo	Descricao	Tipo	Contexto	Tamanho
+C7_FILIAL	Filial	Filial do Sistema	C	Real	2
+C7_TIPCLEG	Legenda	Legenda	C	Virtual	13
+C7_TIPO	Tipo	Controle de PC ou AE	N	Real	1
+C7_ITEM	Item	Item do pedido de compra	C	Real	4
+C7_PRODUTO	Produto	Codigo do produto	C	Real	15
+C7_UM	Unidade	Unidade de medida	C	Real	2
+C7_SEGUM	Segunda UM	Segunda Unidade de Medida	C	Real	2
+C7_QUANT	Quantidade	Quantidade pedida	N	Real	12, 2
+C7_CODTAB	Tab.Preco	Tabela de Preco	C	Real	3
+C7_PRECO	Prc Unitario	Preco unitario do item	N	Real	14, 2
+C7_TOTAL	Vlr.Total	Valor total do item	N	Real	14, 2
+C7_QTSEGUM	Qtd. 2a UM	Qtde na Segunda Unidade	N	Real	12, 2
+C7_IPI	Aliq. IPI	Aliquota de IPI	N	Real	5, 2
+C7_NUMSC	Numero da SC	Numero da solicita.compra	C	Real	6
+C7_ITEMSC	Item da SC	Item da solicita.compra	C	Real	4
+C7_DINITRA	Dt. Ini. Tra	Data inicio de transito	D	Real	8
+C7_DINICOM	Dt. Ini. Com	Data p/ inicio da compra	D	Real	8
+C7_DINICQ	Dt. Ini. CQ	Data inicio de CQ	D	Real	8
+C7_DATPRF	Dt. Entrega	Data Entrega	D	Real	8
+C7_LOCAL	Armazem	Armazem	C	Real	2
+C7_OBSM	Observacoes	Observacoes do item	M	Real	50
+C7_OBS	Observacoes	Observacoes	C	Real	30
+C7_FORNECE	Fornecedor	Codigo do fornecedor	C	Real	6
+C7_LOJA	Loja	Loja do fornecedor	C	Real	2
+C7_CONTA	Cta Contabil	Conta Contabil do Produto	C	Real	20
+C7_ITEMCTA	Item Conta	Item da Conta Contabil	C	Real	9
+C7_CC	Centro Custo	Centro de Custo	C	Real	9
+C7_COND	Cond. Pagto	Codigo da condicao de Pgt	C	Real	3
+C7_CONTATO	Contato	Contato	C	Real	15
+C7_FILENT	Filial Entr.	Filial para Entrega	C	Real	2
+C7_DESC1	Desconto 1	Desconto 1 em cascata	N	Real	5, 2
+C7_DESC2	Desconto 2	Desconto 2 em cascata	N	Real	5, 2
+C7_DESC3	Desconto 3	Desconto 3 em cascata	N	Real	5, 2
+C7_EMISSAO	DT Emissao	Data de Emissao	D	Real	8
+C7_NUM	Numero PC	Numero do pedido de compr	C	Real	6
+C7_QUJE	Qtd.Entregue	Quantidade ja' entregue	N	Real	12, 2
+C7_REAJUST	Reajuste	Codigo da formula do reaj	C	Real	3
+C7_FRETE	Vlr.Frete	Valor do frete combinado	N	Real	14, 2
+C7_EMITIDO	Ja' emitiu	'S' se ja'emitiu	C	Real	1
+C7_DESCRI	Descricao	Descricao do Produto	C	Real	50
+C7_TPFRETE	Tipo Frete	Tipo do Frete Utilizado	C	Real	1
+C7_QTDREEM	Reemissao	Quantidade de Reemissoes	N	Real	2
+C7_CODLIB	Liberacao	Codigo de Liberacao	C	Real	10
+C7_RESIDUO	Resid. Elim.	PC com Residuo Eliminado.	C	Real	1
+C7_NUMCOT	Num.Cotacao	Numero da Cotacao	C	Real	6
+C7_MSG	Mensagem	Mensagem para Pedido	C	Real	3
+C7_TX	Transmissao	Flag para Transmissao	C	Real	2
+C7_CONTROL	Controle	Campo de Controle	C	Real	1
+C7_IPIBRUT	Cons. Desc.	Considera Desconto p/IPI	C	Real	1
+C7_ENCER	Ped. Encerr.	Pedido Encerrado	C	Real	1
+C7_OP	OP.	Ordem de Producao	C	Real	14
+C7_VLDESC	Vl. Desconto	Valor do Desconto do item	N	Real	14, 2
+C7_SEQUEN	Sequencia	Sequencia	C	Real	4
+C7_NUMIMP	Num.Purch.Or	Numero do Purch. Order	C	Real	20
+C7_ORIGEM	Rotina Gerad	Rotina Geradora	C	Real	8
+C7_QTDACLA	Qtd.a Classi	Qtde a Classificar	N	Real	12, 2
+C7_VALEMB	Vlr Embalag.	Valor da Embalagem	N	Real	16, 2
+C7_FLUXO	Fluxo Caixa	Fluxo de Caixa (S/N)	C	Real	1
+C7_TPOP	Tipo Op	Tipo da Ordem de Producao	C	Real	1
+C7_APROV	Grupo Aprov.	Grupo de Aprovacao	C	Real	6
+C7_CONAPRO	Controle Ap.	Controle de Aprovacao	C	Real	1
+C7_GRUPCOM	Gr. Compras	Grupo de Compradores	C	Real	6
+C7_USER	Cod. Usuario	Codigo do Usuario	C	Real	6
+C7_STATME	Status do ME	Status do Mercado Eletr.	C	Real	1
+C7_RESREM	Elim. Reman.	Eliminado por Remanescent	C	Real	1
+C7_OK	Ok	Ok para geracao do ME	C	Real	2
+C7_QTDSOL	Qtde da SC	Quantidade pedida da SC	N	Real	12, 2
+C7_VALIPI	Vlr.IPI	Valor do IPI do Item	N	Real	14, 2
+C7_VALICM	Vlr.ICMS	Valor do ICMS do item	N	Real	14, 2
+C7_OPER	Tip.Operacao	Tipo de Operacao	C	Virtual	2
+C7_TES	Tipo Entrada	Tipo de entrada da nota	C	Real	3
+C7_DESC	% Desc.Item	Desconto no item	N	Real	6, 2
+C7_PICM	Aliq.ICMS	Aliquota de ICMS	N	Real	5, 2
+C7_BASEICM	Base Icms	Valor Base do ICMS	N	Real	14, 2
+C7_BASEIPI	Vlr.Base IPI	Valor Base de Calc. IPI	N	Real	14, 2
+C7_SEGURO	Vlr.Seguro	Valor do Seguro	N	Real	14, 2
+C7_DESPESA	Vlr.Despesas	Valor das Despesas	N	Real	14, 2
+C7_VALFRE	Vlr.Frete	Valor do frete do item	N	Real	14, 2
+C7_MOEDA	Moeda	Moeda	N	Real	2
+C7_TXMOEDA	Taxa Moeda	Taxa Moeda	N	Real	11, 4
+C7_PENDEN	Pendente	Pendente	C	Real	1
+C7_CLVL	Classe Valor	Classe Valor Contabil	C	Real	9
+C7_BASEIR	Base IRRF	Valor Base de Calc. IRRF	N	Real	14, 2
+C7_ALIQIR	Aliq. IRRF	Aliquota IRRF	N	Real	5, 2
+C7_VALIR	Valor IRRF	Valor de IRRF do Item	N	Real	14, 2
+C7_ICMCOMP	ICMS Compl.	Valor Icms Complementar	N	Real	14, 2
+C7_CODGRP	Grupo	Grupo Veiculos/Oficina	C	Virtual	4
+C7_ICMSRET	ICMS Retido	Valor do ICMS Solidario	N	Real	14, 2
+C7_CODITE	Cod. Produto	Produto Veiculos/Oficina	C	Virtual	27
+C7_BASIMP5	Base Imp. 5	Base de Calculo Imposto 5	N	Real	14, 2
+C7_BASIMP6	Base Imp. 6	Base de Calculo Imposto 6	N	Real	14, 2
+C7_VALSOL	Val. ICMS So	Valor do ICMS Solidario	N	Real	14, 2
+C7_ESTOQUE	Atual.Estoq	Atualiza Estoque	C	Real	1
+C7_SOLICIT	Solicitante	Nome Solicitante	C	Real	30
+C7_VALIMP5	Valor Imp. 5	Valor do Imposto 5	N	Real	14, 2
+C7_VALIMP6	Valor Imp. 6	Valor do Imposto 6	N	Real	14, 2
+C7_SEQMRP	Seq MRP	Seq MRP que originou PC	C	Real	6
+C7_CODORCA	Cod. Orcam.	Codigo do Orcamento	C	Real	8
+C7_DTLANC	Dt. Contab.	Data de Contabilizacao	D	Real	8
+C7_CODCRED	Cod.Credor	Codigo do Credor	C	Real	6
+C7_TIPOEMP	Tipo empenho	Tipo de empenho	C	Real	1
+C7_ESPEMP	Esp.Empenho	Especie de Empenho	C	Real	1
+C7_TRANSP	Cod. Transp.	Codigo da Transportadora	C	Real	6
+C7_TRANSLJ	Loja Transp.	Loja da Transportadora	C	Real	2
+C7_FILCEN	Fil.Central.	Fil.Centraliz.Ped.Compra	C	Real	2
+C7_CONTRA	Num.Contrato	Numero do Contrato	C	Real	15
+C7_CONTREV	Rev.Contrato	Revisao do Contrato	C	Real	3
+C7_PLANILH	Num.Planilha	Numero da Planilha	C	Real	6
+C7_MEDICAO	Num.Medicao	Numero da Medicao	C	Real	6
+C7_ITEMED	Item Medicao	Item da Medicao	C	Real	10
+C7_FREPPCC	Tipo Frete	Tipo Frete	C	Real	2
+C7_POLREPR	Politica Rep	Politica de Reprogramacao	C	Real	1
+C7_PERREPR	Periodo Repr	Periodo de Reprogramacao	N	Real	3
+C7_DT_IMP	Dt Import.	Dt Import.	D	Real	8
+C7_GRADE	Grade	Grade	C	Real	1
+C7_AGENTE	Ag.Embarc.	Agente Embarcador	C	Real	3
+C7_ITEMGRD	Item grade	Item da grade	C	Real	3
+C7_FORWARD	Cod Forward.	Forwarder	C	Real	3
+C7_TIPO_EM	Via Transp.	Via Transp.	C	Real	3
+C7_ORIGIMP	Origem	Origem	C	Real	3
+C7_DEST	Destino	Destino	C	Real	3
+C7_COMPRA	Cod.Comprad.	Comprador	C	Real	3
+C7_PESO_B	Peso Bruto	Peso Bruto	N	Real	12, 4
+C7_INCOTER	Incoterm	Incoterm	C	Real	3
+C7_IMPORT	Importador	Codigo do Importador	C	Real	3
+C7_CONSIG	Cod.Consig.	Codigo do Consignatario	C	Real	3
+C7_CONF_PE	Dt Conf Ped	Data Conf. do Pedido	D	Real	8
+C7_DESP	Despachante	Despachante	C	Real	3
+C7_EXPORTA	Exportador	Exportador	C	Real	6
+C7_LOJAEXP	Exp. Loja	Loja do Exportador	C	Real	2
+C7_CONTAIN	Modal. CNTR	Modalidade de Container	C	Real	1
+C7_MT3	Vol. Cubado	Volume Cubado	N	Real	8, 2
+C7_CONTA20	Contain. 20'	Containers de 20'	N	Real	4
+C7_CONTA40	Contain. 40'	Containers de 40'	N	Real	4
+C7_CON40HC	Cont. 40' hc	Containers de 40 hc	N	Real	4
+C7_ARMAZEM	Armazem	Armazem	C	Real	7
+C7_FABRICA	Fabricante	Fabricante	C	Real	6
+C7_LOJFABR	Fabric. Loja	Loja do Fabricante	C	Real	2
+C7_DT_EMB	Dt Embarque	Dt Embarque	D	Real	8
+C7_TEC	Pos.IPI/NCM	Nomenclatura Ext.Mercosul	C	Real	10
+C7_EX_NCM	Ex-NCM	Ex-NCM - determina % I.I.	C	Real	3
+C7_EX_NBM	Ex-NBM	Ex-NBM - determina % IPI	C	Real	3
+C7_BASESOL	Bs. ICMS Sol	Base do ICMS Solidario	N	Real	14, 2
+C7_DIACTB	Cod Diario	Cod Diario Contabilidade	C	Real	2
+C7_NODIA	Seq. Diario	Seq. Diario	C	Real	10
+C7_PO_EIC	Num. PO	Num. PO EIC	C	Real	20
+C7_CODED	Cod. Edital	Codigo do Edital	C	Real	15
+C7_NUMPR	Nr. Processo	Numero Processo	C	Real	15
+C7_FILEDT	Fil Edital	Filial do Edital	C	Real	2
+C7_DRPIMP	DRP Neogrid?	Ped. import. pelo DRP?	C	Virtual	3
+C7_ALQCF2	Aliq COF	Aliquota COF	N	Real	6, 2
+C7_ALQCOF	Aliq Cofins	Aliquota Cofins	N	Real	6, 2
+C7_ALQPIS	Aliquota PIS	Aliquota PIS	N	Real	6, 2
+C7_ALQPS2	Aliq PIS	Aliquota PIS	N	Real	6, 2
+C7_BASCOF	Base Cofins	Base Cofins	N	Real	14, 2
+C7_BASPIS	Base PIS	Base PIS	N	Real	14, 2
+C7_VALCOF	Valor Cofins	Valor Cofins	N	Real	14, 2
+C7_VALPIS	Valor PIS	Valor PIS	N	Real	14, 2
+C7_TIPCOM	Tipo Compra	Tipo de Compra	C	Real	3
+C7_FRETCON	Vl.Fret.Con.	Valor Frete Contratado	N	Real	14, 2
+C7_DEDUCAO	Deducao	Deducao	N	Real	14, 2
+C7_FATDIRE	Fat Direto	Faturamento Direto	N	Real	14, 2
+C7_QUJEDED	Vlr Aten Ded	Vlr atendida deducao	N	Real	14, 2
+C7_QUJEFAT	Vlr Aten Fat	Vlr atendido fat direto	N	Real	14, 2
+C7_QUJERET	Vlr Aten Ret	Vlr atendida retencao	N	Real	14, 2
+C7_RETENCA	Retencao	Retencao	N	Real	14, 2
+C7_CODNE	Cod Nota Emp	Cod. da Nota de Empenho	C	Real	12
+C7_ITEMNE	Item Nt Emp	Item da Nota de Empenho	C	Real	3
+C7_GCPIT	Item Ed	Item do Edital	C	Real	6
+C7_GCPLT	Lote Ed	Lote do Edital	C	Real	8
+C7_BASECSL	Base CSLL	Base CSLL	N	Real	14, 2
+C7_ALIQISS	Aliq. ISS	Aliquota de ISS	N	Real	5, 2
+C7_VALISS	Valor do ISS	Valor do ISS	N	Real	14, 2
+C7_ALIQINS	Aliq. INSS	Aliquota de INSS	N	Real	5, 2
+C7_VALINS	Vlr. do INSS	Valor do Seguro Social	N	Real	14, 2
+C7_ALQCSL	Aliq. CSLL	Aliquota CSLL	N	Real	6, 2
+C7_NUMSA	Nr. S.A.	Numero da Solic.ao Armaz.	C	Real	6
+C7_ACCNUM	Ped. ACC	Pedido ACC	C	Real	50
+C7_ACCITEM	Item ACC	Item Ped. ACC	C	Real	50
+C7_ACCPROC	ACC?	Inidica se esta no ACC.	C	Real	1
+C7_REVISAO	Rev.Estrutur	Revisao do Produto	C	Real	3
+C7_TPCOLAB	TP Colab.	Tp. Mensagem Colaboracao	C	Real	3
+C7_IDTSS	ID TSS	ID TSS Totvs Colaboracao	C	Real	15
+C7_RATEIO	Rateio	Rateio	C	Real	1
+C7_VALCSL	Valor CSLL	Valor CSLL	N	Real	14, 2
+C7_LOTPLS	Lote Pls	Lote Pls	C	Real	10
+C7_CODRDA	Cod.RDA.Pag.	Cod.RDA.Pag.	C	Real	6
+C7_FISCORI	Fil. Origem	Filial de Origem	C	Real	2
+C7_DIREITO	Direito	Direitos minimos das part	M	Real	10
+C7_OBRIGA	Obrigacao	Obrigacoes das partes	M	Real	10
+C7_BASEINS	Base de INSS	Base de INSS	N	Real	14, 2
+C7_BASEISS	Base de ISS	Base de calculo do ISS	N	Real	14, 2
+C7_PLOPELT	Operadora Lt	Operadora Lote Pagto	C	Real	4
+C7_IDTRIB	Id. Tributos	ID dos tributos	C	Real	36
+C7_JUSTIFI	Justif. Cot.	Justificativa Cotacao	C	Real	100
+Indices
+
+Ordem	Chave	Descricao	Nickname
+1	C7_FILIAL + C7_NUM + C7_ITEM + C7_SEQUEN	Numero PC + Item + Sequencia	
+2	C7_FILIAL + C7_PRODUTO + C7_FORNECE + C7_LOJA + C7_NUM	Produto + Fornecedor + Loja + Numero PC	
+3	C7_FILIAL + C7_FORNECE + C7_LOJA + C7_NUM	Fornecedor + Loja + Numero PC	
+4	C7_FILIAL + C7_PRODUTO + C7_NUM + C7_ITEM + C7_SEQUEN	Produto + Numero PC + Item + Sequencia	
+5	C7_FILIAL + DTOS(C7_EMISSAO) + C7_NUM + C7_ITEM + C7_SEQUEN	DT Emissao + Numero PC + Item + Sequencia	
+6	C7_FILENT + C7_PRODUTO + C7_FORNECE + C7_LOJA + C7_NUM + C7_ITEM + C7_ITEMGRD	Filial Entr. + Produto + Fornecedor + Loja + Numero PC + Item + Item g	
+7	C7_FILIAL + C7_PRODUTO + DTOS(C7_DATPRF)	Produto + Dt. Entrega	
+8	C7_FILIAL + C7_OP + C7_NUM + C7_ITEM + C7_SEQUEN	OP. + Numero PC + Item + Sequencia	
+9	C7_FILENT + C7_FORNECE + C7_LOJA + C7_NUM + C7_ITEM	Filial Entr. + Fornecedor + Loja + Numero PC + Item	
+A (10)	C7_FILIAL + STR(C7_TIPO, 1) + C7_NUM + C7_ITEM + C7_SEQUEN	Tipo + Numero PC + Item + Sequencia	
+B (11)	C7_FILIAL + C7_TPOP + C7_OP + C7_NUM + C7_ITEM + C7_SEQUEN	Tipo Op + OP. + Numero PC + Item + Sequencia	
+C (12)	C7_FILIAL + C7_APROV + C7_GRUPCOM	Grupo Aprov. + Gr. Compras	
+D (13)	C7_FILENT + C7_PRODUTO + C7_FORNECE + C7_NUM	Filial Entr. + Produto + Fornecedor + Numero PC	
+E (14)	C7_FILENT + C7_NUM + C7_ITEM	Filial Entr. + Numero PC + Item	
+F (15)	C7_FILIAL + C7_ENCER + C7_PRODUTO + DTOS(C7_EMISSAO)	Ped. Encerr. + Produto + DT Emissao	
+G (16)	C7_FILIAL + DTOS(C7_DATPRF) + C7_PRODUTO + C7_NUM + C7_ITEM + C7_SEQUEN	Dt. Entrega + Produto + Numero PC + Item + Sequencia	
+H (17)	C7_FILENT + C7_FORNECE + C7_LOJA + C7_PRODUTO	Filial Entr. + Fornecedor + Loja + Produto	
+I (18)	C7_FILENT + C7_FORNECE + C7_PRODUTO	Filial Entr. + Fornecedor + Produto	
+J (19)	C7_FILENT + C7_PRODUTO + C7_NUM + C7_ITEM	Filial Entr. + Produto + Numero PC + Item	
+K (20)	C7_FILIAL + C7_NODIA	Seq. Diario	
+L (21)	C7_FILIAL + C7_CODED + C7_NUMPR	Cod. Edital + Nr. Processo	GCP01
+M (22)	C7_FILIAL + C7_LOTPLS + C7_CODRDA	Lote Pls + Cod.RDA.Pag.	LOTEPLS
+N (23)	C7_FILIAL + C7_IDTRIB	Id. Tributos	
+O (24)	C7_FILIAL + C7_CONTA	Cta Contabil	
+P (25)	C7_FILIAL + C7_CONTRA + C7_CONTREV + C7_PLANILH + C7_MEDICAO	Num.Contrato + Rev.Contrato + Num.Planilha + Num.Medicao	
+Relacionamentos
+Descobrir mais
+Aplicacoes
+E-mail
+E-Mail
+TELEFONES
+Email
+Software aplicativo
+PROGRAMAS
+Meu Protheus
+Planilha eletrônica
+Senha Mobile
+Tabela Origem	Tabela Destino	Expressao Origem	Expressao Destino	Relacionamento
+AIA (Tabela de Precos do Fornecedor)	SC7 (Ped.Compra / Aut.Entrega)	AIA_CODFOR + AIA_LOJFOR + AIA_CODTAB	C7_FORNECE + C7_LOJA + C7_CODTAB	1 para N
+AIA (Tabela de Precos do Fornecedor)	SC7 (Ped.Compra / Aut.Entrega)	AIA_CODTAB	C7_CODTAB	1 para N
+CN9 (Contratos)	SC7 (Ped.Compra / Aut.Entrega)	CN9_NUMERO + CN9_REVISA	C7_CONTRA + C7_CONTREV	1 para N
+CND (Cabecalho Medicao de Contratos)	SC7 (Ped.Compra / Aut.Entrega)	CND_CONTRA + CND_REVISA + CND_NUMMED	C7_CONTRA + C7_CONTREV + C7_MEDICAO	1 para N
+CO1 (Editais)	SC7 (Ped.Compra / Aut.Entrega)	CO1_CODEDT + CO1_NUMPRO	C7_CODED + C7_NUMPR	1 para N
+CT1 (Plano de Contas)	SC7 (Ped.Compra / Aut.Entrega)	CT1_CONTA	C7_CONTA	1 para N
+CTD (Item Contabil)	SC7 (Ped.Compra / Aut.Entrega)	CTD_ITEM	C7_ITEMCTA	1 para N
+CTH (Classes de Valores)	SC7 (Ped.Compra / Aut.Entrega)	CTH_CLVL	C7_CLVL	1 para N
+CTT (Centro de Custo)	SC7 (Ped.Compra / Aut.Entrega)	CTT_CUSTO	C7_CC	1 para N
+CVL (Controle de Diario)	SC7 (Ped.Compra / Aut.Entrega)	CVL_COD	C7_DIACTB	1 para N
+CX1 (Itens da Nota de Empenho)	SC7 (Ped.Compra / Aut.Entrega)	CX1_CODNE + CX1_ITEM	C7_CODNE + C7_ITEMNE	N para N
+DB6 (Incoterms)	SC7 (Ped.Compra / Aut.Entrega)	DB6_COD	C7_INCOTER	1 para N
+DB7 (Importadores / Consignatorios)	SC7 (Ped.Compra / Aut.Entrega)	DB7_CODIMP	C7_CONSIG	1 para N
+DB7 (Importadores / Consignatorios)	SC7 (Ped.Compra / Aut.Entrega)	DB7_CODIMP	C7_IMPORT	1 para N
+DB8 (Agentes Embarcadores)	SC7 (Ped.Compra / Aut.Entrega)	DB8_COD	C7_FORWARD	1 para N
+DB8 (Agentes Embarcadores)	SC7 (Ped.Compra / Aut.Entrega)	DB8_COD	C7_AGENTE	1 para N
+DB9 (Despachantes/Empresas)	SC7 (Ped.Compra / Aut.Entrega)	DB9_COD	C7_DESP	1 para N
+DBD (Portos/Aeroportos)	SC7 (Ped.Compra / Aut.Entrega)	DBD_SIGLA	C7_DEST	1 para N
+DBD (Portos/Aeroportos)	SC7 (Ped.Compra / Aut.Entrega)	DBD_SIGLA	C7_ORIGIMP	1 para N
+DBE (Recinto Aduaneiro)	SC7 (Ped.Compra / Aut.Entrega)	DBE_RECALF	C7_ARMAZEM	1 para N
+DBF (Vias de Transporte)	SC7 (Ped.Compra / Aut.Entrega)	DBF_VIA	C7_TIPO_EM	1 para N
+DHK (Tipos de Compra)	SC7 (Ped.Compra / Aut.Entrega)	DHK_CODIGO	C7_TIPCOM	1 para N
+DTY (Contrato de Carreteiro)	SC7 (Ped.Compra / Aut.Entrega)	DTY_NUMPC	C7_NUM	1 para N
+N13 (Orcamentos)	SC7 (Ped.Compra / Aut.Entrega)	N13_CODIGO	C7_CODORCA	1 para N
+NNR (Locais de Estoque)	SC7 (Ped.Compra / Aut.Entrega)	NNR_CODIGO	C7_LOCAL	1 para N
+SA2 (Fornecedores)	SC7 (Ped.Compra / Aut.Entrega)	A2_COD + A2_LOJA	C7_FORNECE + C7_LOJA	1 para N
+SA2 (Fornecedores)	SC7 (Ped.Compra / Aut.Entrega)	A2_COD	C7_CODCRED	1 para N
+SA2 (Fornecedores)	SC7 (Ped.Compra / Aut.Entrega)	A2_COD + A2_LOJA	C7_EXPORTA + C7_LOJAEXP	1 para N
+SA2 (Fornecedores)	SC7 (Ped.Compra / Aut.Entrega)	A2_COD + A2_LOJA	C7_TRANSP + C7_TRANSLJ	1 para N
+SA4 (Transportadoras)	SC7 (Ped.Compra / Aut.Entrega)	A4_COD	C7_TRANSP	1 para N
+SAH (Unidades de Medida)	SC7 (Ped.Compra / Aut.Entrega)	AH_UNIMED	C7_UM	1 para N
+SAH (Unidades de Medida)	SC7 (Ped.Compra / Aut.Entrega)	AH_UNIMED	C7_SEGUM	1 para N
+SAJ (Grupos de Compras)	SC7 (Ped.Compra / Aut.Entrega)	AJ_GRCOM	C7_GRUPCOM	1 para N
+SAL (Grupos de Aprovacao)	SC7 (Ped.Compra / Aut.Entrega)	AL_COD	C7_APROV	1 para N
+SB1 (Descricao Generica do Produto)	SC7 (Ped.Compra / Aut.Entrega)	B1_COD	C7_PRODUTO	1 para N
+SB2 (Saldos Fisico e Financeiro)	SC7 (Ped.Compra / Aut.Entrega)	B2_COD + B2_LOCAL	C7_PRODUTO + C7_LOCAL	1 para N
+SB5 (Dados Adicionais do Produto)	SC7 (Ped.Compra / Aut.Entrega)	B5_COD	C7_PRODUTO	1 para N
+SC1 (Solicitacoes de Compra)	SC7 (Ped.Compra / Aut.Entrega)	C1_NUM + C1_ITEM	C7_NUMSC + C7_ITEMSC	1 para N
+SC2 (Ordens de Producao)	SC7 (Ped.Compra / Aut.Entrega)	C2_NUM + C2_ITEM + C2_SEQUEN + C2_ITEMGRD	C7_OP	1 para N
+SC3 (Contrato de Parceria)	SC7 (Ped.Compra / Aut.Entrega)	C3_NUM + C3_ITEM	C7_NUMSC + C7_ITEMSC	1 para N
+SC7 (Ped.Compra / Aut.Entrega)	AJ9 (Confirmacoes x Aut Entrega)	C7_NUM + C7_ITEM	AJ9_NUMAE + AJ9_ITEMAE	1 para N
+SC7 (Ped.Compra / Aut.Entrega)	CNE (Itens da Medicao de Contratos)	C7_NUM	CNE_PEDIDO	1 para N
+SC7 (Ped.Compra / Aut.Entrega)	D0M (ITENS PLANO DIST. CROSSDOCKING)	C7_NUM	D0M_PEDCOM	1 para 1
+SC7 (Ped.Compra / Aut.Entrega)	D0M (ITENS PLANO DIST. CROSSDOCKING)	C7_NUM + C7_ITEM + C7_FILIAL	D0M_PEDCOM + D0M_ITPC + D0M_FILPED	1 para N
+SC7 (Ped.Compra / Aut.Entrega)	D0M (ITENS PLANO DIST. CROSSDOCKING)	C7_NUM + C7_ITEM + C7_FILIAL	D0M_PEDCOM + D0M_ITPC + D0M_FILPED	1 para N
+SC7 (Ped.Compra / Aut.Entrega)	DB3 (Itens do Doc de Recebimento)	C7_NUM	DB3_NUMPC	1 para N
+SC7 (Ped.Compra / Aut.Entrega)	DKC (Pedidos e Lotes)	C7_NUM + C7_ITEM	DKC_PEDIDO + DKC_ITPED	1 para N
+SC7 (Ped.Compra / Aut.Entrega)	DMI (Conciliacao Pedagio)	C7_NUM	DMI_PEDCOM	1 para N
+SC7 (Ped.Compra / Aut.Entrega)	F76 (TFC-Saldos de Pedidos por Data)	C7_NUM + C7_ITEM + C7_FORNECE + C7_LOJA	F76_PEDIDO + F76_ITEM + F76_CLIFOR + F76_LOJA	1 para 1
+SC7 (Ped.Compra / Aut.Entrega)	GXR (Requisicao Negociacao de Frete)	C7_NUM	GXR_PEDCOM	1 para N
+SC7 (Ped.Compra / Aut.Entrega)	SC6 (Itens dos Pedidos de Venda)	C7_NUM + C7_ITEM + C7_FILIAL	C6_PEDCOM + C6_ITPC + C6_FILPED	1 para N
+SC7 (Ped.Compra / Aut.Entrega)	SCR (Documentos com Alcada)	C7_NUM	CR_NUM	1 para N
+SC7 (Ped.Compra / Aut.Entrega)	SD1 (Itens das NF de Entrada)	C7_NUM + C7_ITEM	D1_PEDIDO + D1_ITEMPC	1 para N
+SC7 (Ped.Compra / Aut.Entrega)	SD6 (Itens do Contrato)	C7_NUM + C7_ITEM	D6_PEDIDO + D6_ITEMPC	1 para N
+SC7 (Ped.Compra / Aut.Entrega)	VV1 (Cadastro de Veiculos)	C7_NUM	VV1_NUMPED	1 para N
+SC7 (Ped.Compra / Aut.Entrega)	VVG (Itens das Entradas de Veiculos)	C7_NUM	VVG_NUMPED	1 para N
+SE4 (Condicoes de Pagamento)	SC7 (Ped.Compra / Aut.Entrega)	E4_CODIGO	C7_COND	1 para N
+SF4 (Tipos de Entrada e Saida)	SC7 (Ped.Compra / Aut.Entrega)	F4_CODIGO	C7_TES	1 para N
+SM4 (Formulas)	SC7 (Ped.Compra / Aut.Entrega)	M4_CODIGO	C7_REAJUST	1 para N
+SM4 (Formulas)	SC7 (Ped.Compra / Aut.Entrega)	M4_CODIGO	C7_MSG	1 para N
+SY1 (Compradores)	SC7 (Ped.Compra / Aut.Entrega)	Y1_COD	C7_COMPRA	1 para N
+Tabelas do Protheus v4.5 (baseado no P12.1.2410) - paginas geradas em 03/11/2024 - 10.798 tabelas e 11.881 parametros
