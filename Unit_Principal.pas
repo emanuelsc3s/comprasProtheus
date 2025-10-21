@@ -19,7 +19,10 @@ type
     QueryTOTVS: TADOQuery;
     procedure btn_IntegrarPedidosClick(Sender: TObject);
   private
-    { Private declarations }
+    // Métodos auxiliares privados para logging e validação de tamanhos
+    procedure LogExecSqlError(const E: Exception; Query: TADOQuery; const Operacao, Tabela: string; PedidoID, ProximoRecNo: Integer; const Violations: string);
+    function GetTableFieldSizeMap(ADOConn: TADOConnection; const TableName: string): TStringList;
+    function ValidateStringParamsAgainstSchema(Query: TADOQuery; FieldSizes: TStringList): string;
   public
     { Public declarations }
     function  CalcularQuantidadeSegundaUM(QuantidadePrimeiraUM: Double; FatorConversao: Double; TipoConversao: String): Double;
@@ -33,7 +36,7 @@ implementation
 
 {$R *.dfm}
 
-uses Unit_dm1;
+uses Unit_dm1, System.IOUtils, ComObj;
 
 function TForm1.CalcularQuantidadeSegundaUM(QuantidadePrimeiraUM: Double; FatorConversao: Double; TipoConversao: String): Double;
 begin
@@ -48,16 +51,21 @@ end;
 
 procedure TForm1.btn_IntegrarPedidosClick(Sender: TObject);
 var
-  QueryProtheus : TADOQuery;
-  qProtheus     : TADOQuery;
+  QueryProtheus   : TADOQuery;
+  qProtheus       : TADOQuery;
   VerificaRegistro: TADOQuery;
   UltimoRecNo, ProximoRecNo: Integer;
-  FatorConversao : Double;
-  TipoConversao  : String;
+  FatorConversao  : Double;
+  TipoConversao   : String;
+  FieldSizes      : TStringList;
+  Violations      : string;
 begin
   QueryProtheus := TADOQuery.Create(self);
   qProtheus     := TADOQuery.Create(self);
   VerificaRegistro := TADOQuery.Create(self); // Novo query para verificação
+  // Mapa de tamanhos dos campos da SC7010 para validação preventiva
+  FieldSizes := GetTableFieldSizeMap(dm1.ADOConnection, 'SC7010');
+
   // Força ordenação por pedidoitem_id para gerar C7_ITEM sequencial por pedido
   with PedidoSIC do
   begin
@@ -97,8 +105,8 @@ begin
     VerificaRegistro.SQL.Add('SELECT 1 FROM SC7010 (NOLOCK) ');
     VerificaRegistro.SQL.Add('WHERE D_E_L_E_T_ = '''' ');
 
-    VerificaRegistro.SQL.Add('AND C7_FILIAL = :FILIAL AND C7_NUM = :NUM AND C7_ITEM = :ITEM ');    
-    
+    VerificaRegistro.SQL.Add('AND C7_FILIAL = :FILIAL AND C7_NUM = :NUM AND C7_ITEM = :ITEM ');
+
     VerificaRegistro.Parameters.ParamByName('FILIAL').Value := '01';
     VerificaRegistro.Parameters.ParamByName('NUM').Value    := Format('%.6d', [PedidoSIC.FieldByName('PEDIDO_ID').AsInteger]);
     VerificaRegistro.Parameters.ParamByName('ITEM').Value   := Format('0%.3s', [PedidoSIC.FieldByName('ITEM').AsString]);
@@ -188,7 +196,33 @@ begin
         Parameters.ParamByName('C7_DINICQ').Value    := Copy(FormatDateTime('YYYYMMDD', PedidoSIC.FieldByName('EMISSAO').AsDateTime), 1, 8); // varchar(8)
         Parameters.ParamByName('C7_FISCORI').Value   := Copy('01', 1, 2); // varchar(2)
         Parameters.ParamByName('S_T_A_M_P_').Value   := Now; // datetime
-        ExecSQL;
+        // Validacao preventiva de tamanho de campos baseado no schema
+        Violations := ValidateStringParamsAgainstSchema(QueryProtheus, FieldSizes);
+        if Violations <> '' then
+        begin
+          LogExecSqlError(Exception.Create('Violacao de tamanho detectada antes do ExecSQL'), QueryProtheus, 'INSERT', 'SC7010', PedidoSIC.FieldByName('PEDIDO_ID').AsInteger, ProximoRecNo, Violations);
+          ShowMessage('Pedido ' + IntToStr(PedidoSIC.FieldByName('PEDIDO_ID').AsInteger) +
+                      ' ITEM ' + Format('0%.3s', [PedidoSIC.FieldByName('ITEM').AsString]) +
+                      ': existem campos maiores que o limite do Protheus.' + sLineBreak +
+                      'Detalhes no log.');
+        end
+        else
+        begin
+          try
+            ExecSQL;
+          except
+            on E: EOleException do
+            begin
+              LogExecSqlError(E, QueryProtheus, 'INSERT', 'SC7010', PedidoSIC.FieldByName('PEDIDO_ID').AsInteger, ProximoRecNo, '');
+              ShowMessage('Erro ao inserir o pedido ' + IntToStr(PedidoSIC.FieldByName('PEDIDO_ID').AsInteger) + ': ' + E.Message + sLineBreak + 'Detalhes no log.');
+            end;
+            on E: Exception do
+            begin
+              LogExecSqlError(E, QueryProtheus, 'INSERT', 'SC7010', PedidoSIC.FieldByName('PEDIDO_ID').AsInteger, ProximoRecNo, '');
+              raise;
+            end;
+          end;
+        end;
       end;
     end;
     PedidoSIC.Next;
@@ -196,6 +230,9 @@ begin
   QueryProtheus.Free;
   qProtheus.Free;
   VerificaRegistro.Free;
+  if Assigned(FieldSizes) then
+    FieldSizes.Free;
+
   ShowMessage('Concluído com Sucesso');
 end;
 
@@ -221,6 +258,120 @@ begin
     end;
   end;
 end;
+
+// Gera um mapa NomeDoCampo -> Tamanho (apenas campos string) a partir do schema via SELECT TOP 0
+function TForm1.GetTableFieldSizeMap(ADOConn: TADOConnection; const TableName: string): TStringList;
+var
+  Q: TADOQuery;
+  i: Integer;
+begin
+  Result := TStringList.Create;
+  Result.NameValueSeparator := '=';
+  Q := TADOQuery.Create(nil);
+  try
+    Q.Connection := ADOConn;
+    Q.SQL.Text := 'SELECT TOP 0 * FROM ' + TableName + ' (NOLOCK)';
+    Q.Open;
+    for i := 0 to Q.Fields.Count - 1 do
+    begin
+      if Q.Fields[i].DataType in [ftString, ftWideString, ftFixedChar, ftFixedWideChar] then
+        Result.Values[UpperCase(Q.Fields[i].FieldName)] := IntToStr(Q.Fields[i].Size);
+    end;
+  finally
+    Q.Free;
+  end;
+end;
+
+// Valida os parametros string do Query contra os tamanhos do schema
+function TForm1.ValidateStringParamsAgainstSchema(Query: TADOQuery; FieldSizes: TStringList): string;
+var
+  i, Limit, Len: Integer;
+  P: TParameter;
+  Col, S: string;
+  Msg: TStringList;
+begin
+  Result := '';
+  Msg := TStringList.Create;
+  try
+    for i := 0 to Query.Parameters.Count - 1 do
+    begin
+      P := Query.Parameters[i];
+      if VarIsStr(P.Value) then
+      begin
+        S := VarToStrDef(P.Value, '');
+        Len := Length(S);
+        Col := UpperCase(P.Name);
+        Limit := StrToIntDef(FieldSizes.Values[Col], 0);
+        if (Limit > 0) and (Len > Limit) then
+          Msg.Add(Format('%s: len=%d > limit=%d; value="%s"', [P.Name, Len, Limit, Copy(S, 1, 200)]));
+      end;
+    end;
+    if Msg.Count > 0 then
+      Result := Msg.Text;
+  finally
+    Msg.Free;
+  end;
+end;
+
+// Loga detalhes completos da falha de ExecSQL
+procedure TForm1.LogExecSqlError(const E: Exception; Query: TADOQuery; const Operacao, Tabela: string; PedidoID, ProximoRecNo: Integer; const Violations: string);
+var
+  SL: TStringList;
+  i, Len, DeclSize: Integer;
+  P: TParameter;
+  S, SchemaSizeStr, LogDir, LogFile: string;
+  FieldSizesLocal: TStringList;
+begin
+  SL := TStringList.Create;
+  FieldSizesLocal := nil;
+  try
+    LogDir := IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0)) + 'logs');
+    ForceDirectories(LogDir);
+    LogFile := LogDir + 'ComprasProtheus_' + FormatDateTime('yyyymmdd', Now) + '.log';
+
+    SL.Add('[' + FormatDateTime('yyyy-mm-dd hh:nn:ss.zzz', Now) + '] ' + Operacao + ' ' + Tabela);
+    SL.Add('PedidoID=' + IntToStr(PedidoID) + ' ProximoRecNo=' + IntToStr(ProximoRecNo));
+    SL.Add('Erro: ' + E.ClassName + ' - ' + E.Message);
+    SL.Add('SQL:');
+    SL.Add(Query.SQL.Text);
+    SL.Add('Parametros:');
+
+    try
+      if Assigned(Query.Connection) then
+        FieldSizesLocal := GetTableFieldSizeMap(TADOConnection(Query.Connection), Tabela);
+    except
+      FieldSizesLocal := nil;
+    end;
+
+    for i := 0 to Query.Parameters.Count - 1 do
+    begin
+      P := Query.Parameters[i];
+      S := VarToStrDef(P.Value, '');
+      Len := Length(S);
+      DeclSize := P.Size;
+      SchemaSizeStr := '';
+      if Assigned(FieldSizesLocal) then
+        SchemaSizeStr := FieldSizesLocal.Values[UpperCase(P.Name)];
+
+      SL.Add(Format(' - %s = "%s" | len=%d | ParamSize=%d | SchemaSize=%s',
+                    [P.Name, Copy(S, 1, 200), Len, DeclSize, SchemaSizeStr]));
+    end;
+
+    if Violations <> '' then
+    begin
+      SL.Add('Violations:');
+      SL.Add(Violations);
+    end;
+
+    SL.Add(StringOfChar('-', 80));
+    TFile.AppendAllText(LogFile, SL.Text, TEncoding.UTF8);
+  finally
+    SL.Free;
+    if Assigned(FieldSizesLocal) then
+      FieldSizesLocal.Free;
+  end;
+end;
+
 
 
 end.
