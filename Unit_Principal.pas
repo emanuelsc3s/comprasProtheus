@@ -84,6 +84,9 @@ begin
     SQL.Add('  left join tbcc cc on cc.cc_id             = i.cc_id and c.deletado = ''N'' ');
 
     SQL.Add('where p.deletado = ''N''');
+    SQL.Add('  and (p.SYNC IS NULL OR p.SYNC = '''' OR p.SYNC = ''S'')');
+    SQL.Add('  and (i.SYNC IS NULL OR i.SYNC = '''' OR i.SYNC = ''S'')');
+
 
     SQL.Add('and cast(p.data_inc as date) >= ''01.10.2025'' ');
 
@@ -168,11 +171,15 @@ begin
         Parameters.ParamByName('C7_DESCRI').Value    := Copy(PedidoSIC.FieldByName('PRODUTO').AsString, 1, 30); // varchar(30)
         Parameters.ParamByName('C7_IPIBRUT').Value   := Copy('0', 1, 1); // varchar(1)
         Parameters.ParamByName('C7_CONAPRO').Value   := Copy('L', 1, 1); // varchar(1)
-        Parameters.ParamByName('C7_USER').Value      := Copy('000000', 1, 6); // varchar(6)
+        Parameters.ParamByName('C7_USER').Value      := Copy('000001', 1, 6); // varchar(6)
         Parameters.ParamByName('C7_TES').Value       := Copy('', 1, 3); // varchar(3)
         Parameters.ParamByName('C7_POLREPR').Value   := Copy('N', 1, 1); // varchar(1)
-        Parameters.ParamByName('C7_RATEIO').Value    := Copy('2', 1, 1); // varchar(1)
         Parameters.ParamByName('C7_ACCPROC').Value   := Copy('2', 1, 1); // varchar(1)
+
+        // C7_RATEIO
+        // Valor '1' (Sim) no pedido: Permite a distribuição dos valores para diferentes centros de custo tanto no pedido quanto na entrada.
+        // Valor '2' (Não) no pedido: Impede o rateio. Se a rotina de entrada (MATA103) estiver configurada para obrigar a informação de centro de custo, o sistema irá bloquear a operação se o usuário tentar ratear     
+        Parameters.ParamByName('C7_RATEIO').Value    := '1'; // varchar(1)                
 
         with qProtheus do
         begin
@@ -210,6 +217,44 @@ begin
         begin
           try
             ExecSQL;
+
+            // Atualiza sincronizacao no Firebird apos sucesso no Protheus
+            var FBUpd: TFDQuery;
+            var SyncTime: TDateTime;
+            SyncTime := Now;
+            dm1.FDConnection.StartTransaction;
+            try
+              FBUpd := TFDQuery.Create(nil);
+              try
+                FBUpd.Connection := dm1.FDConnection;
+                // Atualiza item
+                FBUpd.SQL.Text := 'update tbpedido_item set sync = :s, sync_data = :d where pedidoitem_id = :id';
+                FBUpd.ParamByName('s').AsString := 'S';
+                FBUpd.ParamByName('d').AsDateTime := SyncTime;
+                FBUpd.ParamByName('id').AsInteger := PedidoSIC.FieldByName('PEDIDOITEM_ID').AsInteger;
+                FBUpd.ExecSQL;
+                // Atualiza cabecalho somente se todos os itens estiverem sincronizados
+                FBUpd.SQL.Text := 'update tbpedido p set sync = :s, sync_data = :d ' +
+                                  'where p.pedido_id = :pid ' +
+                                  'and not exists (select 1 from tbpedido_item i ' +
+                                  '                 where i.pedido_id = p.pedido_id ' +
+                                  '                   and coalesce(i.sync, '''') <> ''S'')';
+                FBUpd.ParamByName('s').AsString := 'S';
+                FBUpd.ParamByName('d').AsDateTime := SyncTime;
+                FBUpd.ParamByName('pid').AsInteger := PedidoSIC.FieldByName('PEDIDO_ID').AsInteger;
+                FBUpd.ExecSQL;
+              finally
+                FBUpd.Free;
+              end;
+              dm1.FDConnection.Commit;
+            except
+              on E: Exception do
+              begin
+                dm1.FDConnection.Rollback;
+                ShowMessage('Falha ao atualizar SYNC no Firebird para o pedido ' + IntToStr(PedidoSIC.FieldByName('PEDIDO_ID').AsInteger) + ': ' + E.Message);
+                raise;
+              end;
+            end;
           except
             on E: EOleException do
             begin

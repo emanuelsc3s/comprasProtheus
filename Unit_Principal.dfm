@@ -65,6 +65,8 @@ object Form1: TForm1
         '  left join tbcondpagto c on c.condpagto_id = p.condpagto_id and' +
         ' c.deletado = '#39'N'#39
       'where p.deletado = '#39'N'#39
+      '  and (p.SYNC IS NULL OR p.SYNC = '''' OR p.SYNC = ''S'')'
+      '  and (i.SYNC IS NULL OR i.SYNC = '''' OR i.SYNC = ''S'')'
       ' -- and p.entrada_saida = '#39'E'#39
       '  --and p.emissao >= '#39'01.01.2024'#39
       '  --and i.status = '#39'Aprovado'#39
