@@ -157,7 +157,7 @@ begin
         Parameters.ParamByName('C7_DATPRF').Value    := Copy(FormatDateTime('YYYYMMDD', PedidoSIC.FieldByName('EMISSAO').AsDateTime), 1, 8); // varchar(8)
         Parameters.ParamByName('C7_LOCAL').Value     := Copy('01', 1, 2); // varchar(2)
         Parameters.ParamByName('C7_FORNECE').Value   := Copy(PedidoSIC.FieldByName('ERP_CODIGO').AsString, 1, 6); // varchar(6)
-        Parameters.ParamByName('C7_CC').Value        := Copy(PedidoSIC.FieldByName('codigo_centro').AsString, 1, 9); // varchar(9)
+        Parameters.ParamByName('C7_CC').Value        := Copy(PedidoSIC.FieldByName('codigo_centro').AsString, 1, 15); // varchar(15)
         Parameters.ParamByName('C7_COND').Value      := Copy(PedidoSIC.FieldByName('ERP_COND').AsString, 1, 3); // varchar(3)
         Parameters.ParamByName('C7_CONTA').Value     := Copy('', 1, 20); // varchar(20)
         Parameters.ParamByName('C7_LOJA').Value      := Copy('01', 1, 2); // varchar(2)
@@ -165,7 +165,7 @@ begin
         Parameters.ParamByName('C7_EMISSAO').Value   := Copy(FormatDateTime('YYYYMMDD', PedidoSIC.FieldByName('EMISSAO').AsDateTime), 1, 8); // varchar(8)
         Parameters.ParamByName('C7_NUM').Value       := Copy(Format('%.6d', [PedidoSIC.FieldByName('PEDIDO_ID').AsInteger]), 1, 6); // varchar(6)
         Parameters.ParamByName('C7_QUJE').Value      := 0; // float
-        Parameters.ParamByName('C7_DESCRI').Value    := Copy(PedidoSIC.FieldByName('PRODUTO').AsString, 1, 50); // varchar(50)
+        Parameters.ParamByName('C7_DESCRI').Value    := Copy(PedidoSIC.FieldByName('PRODUTO').AsString, 1, 30); // varchar(30)
         Parameters.ParamByName('C7_IPIBRUT').Value   := Copy('0', 1, 1); // varchar(1)
         Parameters.ParamByName('C7_CONAPRO').Value   := Copy('L', 1, 1); // varchar(1)
         Parameters.ParamByName('C7_USER').Value      := Copy('000000', 1, 6); // varchar(6)
@@ -235,7 +235,6 @@ begin
 
   ShowMessage('Concluído com Sucesso');
 end;
-
 
 procedure TForm1.CheckFieldSizes(Query: TADOQuery);
 var
@@ -371,7 +370,5 @@ begin
       FieldSizesLocal.Free;
   end;
 end;
-
-
 
 end.
