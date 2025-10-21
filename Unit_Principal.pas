@@ -59,7 +59,24 @@ var
   TipoConversao   : String;
   FieldSizes      : TStringList;
   Violations      : string;
+  qSession        : TIBQuery;
 begin
+  try
+    qSession := TIBQuery.Create(self);
+    with qSession do
+      begin
+        Database    := dm1.IBDatabase1;
+        Transaction := dm1.IBTransaction1;
+
+        Close;
+        SQL.Text := 'SELECT RDB$SET_CONTEXT(''USER_SESSION'',''USUARIOLOGADO'',''emanuel.silva'')';
+        SQL.Add(' FROM RDB$DATABASE');
+        Open;
+      end;
+  finally
+    qSession.Free;
+  end;
+
   QueryProtheus := TADOQuery.Create(self);
   qProtheus     := TADOQuery.Create(self);
   VerificaRegistro := TADOQuery.Create(self); // Novo query para verificação
@@ -84,8 +101,7 @@ begin
     SQL.Add('  left join tbcc cc on cc.cc_id             = i.cc_id and c.deletado = ''N'' ');
 
     SQL.Add('where p.deletado = ''N''');
-    SQL.Add('  and (p.SYNC IS NULL OR p.SYNC = '''' OR p.SYNC = ''S'')');
-    SQL.Add('  and (i.SYNC IS NULL OR i.SYNC = '''' OR i.SYNC = ''S'')');
+    SQL.Add('  and (i.SYNC IS NULL OR i.SYNC = '''' OR i.SYNC = ''N'')');
 
 
     SQL.Add('and cast(p.data_inc as date) >= ''01.10.2025'' ');
