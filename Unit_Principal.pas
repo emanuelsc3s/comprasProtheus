@@ -51,37 +51,57 @@ var
   QueryProtheus : TADOQuery;
   qProtheus     : TADOQuery;
   VerificaRegistro: TADOQuery;
-  ItemSequencia : Integer;
-  SequenciaFormatada, PedidoIDAtual, PedidoIDAnterior: String;
   UltimoRecNo, ProximoRecNo: Integer;
   FatorConversao : Double;
+  TipoConversao  : String;
 begin
   QueryProtheus := TADOQuery.Create(self);
   qProtheus     := TADOQuery.Create(self);
   VerificaRegistro := TADOQuery.Create(self); // Novo query para verificação
-  PedidoSIC.Close;
-  PedidoSIC.Open;
-  ItemSequencia := 0;
-  PedidoIDAnterior := '';
+  // Força ordenação por pedidoitem_id para gerar C7_ITEM sequencial por pedido
+  with PedidoSIC do
+  begin
+    Close;
+    SQL.Clear;
+
+    SQL.Add('select');
+    SQL.Add('  i.status, p.pedido_id, p.emissao, i.qtde, i.produto_id, pr.referencia as ERP_PRODUTO, i.produto,');
+    SQL.Add('  pr.unidade, i.preco, i.total, f.erp_codigo, c.erp_codigo as ERP_COND, i.pedidoitem_id, i.item as ITEM,');
+    SQL.Add('  cc.codigo_centro');
+    SQL.Add('from tbpedido p');
+    SQL.Add('  inner join tbpedido_item i on p.pedido_id = i.pedido_id and i.deletado = ''N''');
+    SQL.Add('  inner join tbprodutos pr on pr.produto_id = i.produto_id and pr.deletado = ''N''');
+    SQL.Add('  inner join tbpessoas f on f.pessoa_id     = p.pessoa_id and f.deletado = ''N''');
+    SQL.Add('  left join tbcondpagto c on c.condpagto_id = p.condpagto_id and c.deletado = ''N''');
+    SQL.Add('  left join tbcc cc on cc.cc_id             = i.cc_id and c.deletado = ''N'' ');
+
+    SQL.Add('where p.deletado = ''N''');
+
+    SQL.Add('and cast(p.data_inc as date) >= ''01.10.2025'' ');
+
+    SQL.Add('and p.pedido_id = 60072');
+
+    SQL.Add('order by p.pedido_id, i.pedidoitem_id');
+    Open;
+  end;
+
   PedidoSIC.First;
   while not PedidoSIC.Eof do
   begin
-    PedidoIDAtual := PedidoSIC.FieldByName('pedido_id').AsString;
-    // Se o pedido_id atual é diferente do anterior, reinicie a contagem
-    if PedidoIDAtual <> PedidoIDAnterior then
-    begin
-      ItemSequencia := 0;
-      PedidoIDAnterior := PedidoIDAtual; // Atualiza o PedidoIDAnterior para ser o mesmo do atual para a próxima iteração
-    end;
 
-    Inc(ItemSequencia); // Incrementa a sequência
-    SequenciaFormatada := Format('%.4d', [ItemSequencia]);
 
-    // Verificar se o registro já existe
+    // Verificar se o ITEM já existe (C7_FILIAL + C7_NUM + C7_ITEM) ignorando deletados
     VerificaRegistro.Connection := dm1.ADOConnection;
+    VerificaRegistro.Close;
     VerificaRegistro.SQL.Clear;
-    VerificaRegistro.SQL.Add('SELECT C7_NUM FROM SC7010 (NOLOCK) WHERE C7_NUM = :C7_NUM');
-    VerificaRegistro.Parameters.ParamByName('C7_NUM').Value := Format('%.6d', [PedidoSIC.FieldByName('PEDIDO_ID').AsInteger]);
+    VerificaRegistro.SQL.Add('SELECT 1 FROM SC7010 (NOLOCK) ');
+    VerificaRegistro.SQL.Add('WHERE D_E_L_E_T_ = '''' ');
+
+    VerificaRegistro.SQL.Add('AND C7_FILIAL = :FILIAL AND C7_NUM = :NUM AND C7_ITEM = :ITEM ');    
+    
+    VerificaRegistro.Parameters.ParamByName('FILIAL').Value := '01';
+    VerificaRegistro.Parameters.ParamByName('NUM').Value    := Format('%.6d', [PedidoSIC.FieldByName('PEDIDO_ID').AsInteger]);
+    VerificaRegistro.Parameters.ParamByName('ITEM').Value   := Format('0%.3s', [PedidoSIC.FieldByName('ITEM').AsString]);
     VerificaRegistro.Open;
 
     // Se o registro não existe, fazer o INSERT
@@ -104,11 +124,11 @@ begin
 
         // Ajuste de acordo com os limites da tabela
         Parameters.ParamByName('C7_FILIAL').Value    := Copy('01', 1, 2); // varchar(2)
-        Parameters.ParamByName('C7_TIPO').Value      := '1'; // Tipo é float, se necessário, faça a conversão
-        Parameters.ParamByName('C7_ITEM').Value      := Copy(SequenciaFormatada, 1, 4); // varchar(4)
+        Parameters.ParamByName('C7_TIPO').Value      := 1; // Pedido de compra
+        Parameters.ParamByName('C7_ITEM').Value      := Copy(Format('0%.3s', [PedidoSIC.FieldByName('ITEM').AsString]), 1, 4); // varchar(4)
         Parameters.ParamByName('C7_PRODUTO').Value   := Copy(PedidoSIC.FieldByName('ERP_PRODUTO').AsString, 1, 15); // varchar(15)
         Parameters.ParamByName('C7_UM').Value        := Copy(PedidoSIC.FieldByName('UNIDADE').AsString, 1, 2); // varchar(2)
-        Parameters.ParamByName('C7_SEGUM').Value     := dm1.fRetornaCampoProtheus('A2_LOJA','SA2010','A2_COD',PedidoSIC.FieldByName('ERP_PRODUTO').AsString);
+        Parameters.ParamByName('C7_SEGUM').Value     := Copy(dm1.fRetornaCampoProtheus('B1_SEGUM','SB1010','B1_COD',PedidoSIC.FieldByName('ERP_PRODUTO').AsString), 1, 2);
         Parameters.ParamByName('C7_QUANT').Value     := PedidoSIC.FieldByName('QTDE').AsFloat; // float
         Parameters.ParamByName('C7_PRECO').Value     := PedidoSIC.FieldByName('PRECO').AsFloat; // float
 
@@ -118,12 +138,18 @@ begin
           Parameters.ParamByName('C7_TOTAL').Value := PedidoSIC.FieldByName('TOTAL').AsFloat;
 
         FatorConversao := StrToFloatDef(dm1.fRetornaCampoProtheus('B1_CONV','SB1010','B1_COD',PedidoSIC.FieldByName('ERP_PRODUTO').AsString), 0);
-        Parameters.ParamByName('C7_QTSEGUM').Value   := CalcularQuantidadeSegundaUM(PedidoSIC.FieldByName('QTDE').AsFloat,FatorConversao,dm1.fRetornaCampoProtheus('B1_TIPCONV','SB1010','B1_COD',PedidoSIC.FieldByName('ERP_PRODUTO').AsString));
+        TipoConversao  := dm1.fRetornaCampoProtheus('B1_TIPCONV','SB1010','B1_COD',PedidoSIC.FieldByName('ERP_PRODUTO').AsString);
+
+        if (SameText(TipoConversao, 'D')) and (FatorConversao = 0) then
+          Parameters.ParamByName('C7_QTSEGUM').Value := 0
+        else
+          Parameters.ParamByName('C7_QTSEGUM').Value := CalcularQuantidadeSegundaUM(PedidoSIC.FieldByName('QTDE').AsFloat, FatorConversao, TipoConversao);
+
         Parameters.ParamByName('C7_IPI').Value       := 0; // float
         Parameters.ParamByName('C7_DATPRF').Value    := Copy(FormatDateTime('YYYYMMDD', PedidoSIC.FieldByName('EMISSAO').AsDateTime), 1, 8); // varchar(8)
         Parameters.ParamByName('C7_LOCAL').Value     := Copy('01', 1, 2); // varchar(2)
         Parameters.ParamByName('C7_FORNECE').Value   := Copy(PedidoSIC.FieldByName('ERP_CODIGO').AsString, 1, 6); // varchar(6)
-        Parameters.ParamByName('C7_CC').Value        := Copy('', 1, 9); // varchar(9)
+        Parameters.ParamByName('C7_CC').Value        := Copy(PedidoSIC.FieldByName('codigo_centro').AsString, 1, 9); // varchar(9)
         Parameters.ParamByName('C7_COND').Value      := Copy(PedidoSIC.FieldByName('ERP_COND').AsString, 1, 3); // varchar(3)
         Parameters.ParamByName('C7_CONTA').Value     := Copy('', 1, 20); // varchar(20)
         Parameters.ParamByName('C7_LOJA').Value      := Copy('01', 1, 2); // varchar(2)
@@ -131,7 +157,7 @@ begin
         Parameters.ParamByName('C7_EMISSAO').Value   := Copy(FormatDateTime('YYYYMMDD', PedidoSIC.FieldByName('EMISSAO').AsDateTime), 1, 8); // varchar(8)
         Parameters.ParamByName('C7_NUM').Value       := Copy(Format('%.6d', [PedidoSIC.FieldByName('PEDIDO_ID').AsInteger]), 1, 6); // varchar(6)
         Parameters.ParamByName('C7_QUJE').Value      := 0; // float
-        Parameters.ParamByName('C7_DESCRI').Value    := Copy(PedidoSIC.FieldByName('PRODUTO').AsString, 1, 30); // varchar(30)
+        Parameters.ParamByName('C7_DESCRI').Value    := Copy(PedidoSIC.FieldByName('PRODUTO').AsString, 1, 50); // varchar(50)
         Parameters.ParamByName('C7_IPIBRUT').Value   := Copy('0', 1, 1); // varchar(1)
         Parameters.ParamByName('C7_CONAPRO').Value   := Copy('L', 1, 1); // varchar(1)
         Parameters.ParamByName('C7_USER').Value      := Copy('000000', 1, 6); // varchar(6)
