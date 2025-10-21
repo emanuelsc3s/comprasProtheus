@@ -36,7 +36,7 @@ implementation
 
 {$R *.dfm}
 
-uses Unit_dm1, System.IOUtils, ComObj;
+uses Unit_dm1, System.IOUtils, ComObj, IBX.IBQuery, IBX.IBDatabase;
 
 function TForm1.CalcularQuantidadeSegundaUM(QuantidadePrimeiraUM: Double; FatorConversao: Double; TipoConversao: String): Double;
 begin
@@ -59,14 +59,13 @@ var
   TipoConversao   : String;
   FieldSizes      : TStringList;
   Violations      : string;
-  qSession        : TIBQuery;
+  qSession        : TFDQuery;
 begin
   try
-    qSession := TIBQuery.Create(self);
+    qSession := TFDQuery.Create(self);
     with qSession do
       begin
-        Database    := dm1.IBDatabase1;
-        Transaction := dm1.IBTransaction1;
+        Connection  := dm1.FDConnection;
 
         Close;
         SQL.Text := 'SELECT RDB$SET_CONTEXT(''USER_SESSION'',''USUARIOLOGADO'',''emanuel.silva'')';
@@ -106,7 +105,7 @@ begin
 
     SQL.Add('and cast(p.data_inc as date) >= ''01.10.2025'' ');
 
-    SQL.Add('and p.pedido_id = 60072');
+//    SQL.Add('and p.pedido_id = 60072');
 
     SQL.Add('order by p.pedido_id, i.pedidoitem_id');
     Open;
@@ -115,8 +114,6 @@ begin
   PedidoSIC.First;
   while not PedidoSIC.Eof do
   begin
-
-
     // Verificar se o ITEM já existe (C7_FILIAL + C7_NUM + C7_ITEM) ignorando deletados
     VerificaRegistro.Connection := dm1.ADOConnection;
     VerificaRegistro.Close;
